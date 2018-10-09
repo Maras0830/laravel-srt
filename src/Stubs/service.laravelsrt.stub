@@ -1,0 +1,18 @@
+<?php
+namespace DummyNamespace;
+
+use DummyRepositoryNamespace;
+
+class DummyClass
+{
+    private $repository;
+
+    /**
+     * AtmTransformer constructor.
+     * @param $DummyRepositoryParameter
+     */
+    public function __construct(DummyRepository $DummyRepositoryParameter)
+    {
+        $this->repository = $DummyRepositoryParameter;
+    }
+}

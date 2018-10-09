@@ -1,0 +1,20 @@
+{
+    "name": "maras0830/laravel-srt",
+    "description": "Service, Repository, Transformer simple generator.",
+    "type": "library",
+    "require": {
+        "league/fractal": "^0.17.0"
+    },
+    "authors": [
+        {
+            "name": "Maras0830",
+            "email": "Maras0830@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Maras0830\\LaravelSRT\\": "src/"
+        }
+    },
+    "minimum-stability": "stable"
+}

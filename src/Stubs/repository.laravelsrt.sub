@@ -1,0 +1,15 @@
+<?php
+namespace DummyNamespace;
+
+use Maras0830\LaravelSRT\Repository\Repository;
+use DummyModelNamespace;
+
+class DummyClass extends Repository
+{
+    private $model;
+
+    public function transform(DummyModel $DummyModelParameter)
+    {
+        $this->model = $DummyModelParameter;
+    }
+}
