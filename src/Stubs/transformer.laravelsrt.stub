@@ -1,7 +1,7 @@
 <?php
 namespace DummyNamespace;
 
-use Maras0830\laravelSRT\Traits\TransformerCollectionTrait;
+use Maras0830\LaravelSRT\Traits\TransformerCollectionTrait;
 use League\Fractal\TransformerAbstract;
 use DummyModelNamespace;
 
