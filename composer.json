@@ -16,5 +16,12 @@
             "Maras0830\\LaravelSRT\\": "src/"
         }
     },
-    "minimum-stability": "stable"
+    "minimum-stability": "stable",
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Maras0830\\LaravelSRT\\Providers\\LaravelSRTProvider"
+            ]
+        }
+    }
 }

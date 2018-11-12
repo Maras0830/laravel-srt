@@ -5,16 +5,22 @@ Generator tool
 
 ---
 
+## Installation
+
+```shell
+$ composer require maras0830/laravel-srt
+```
+
 ## USAGE
 
 ### Make Service
 ```
-$ php artsian make:service UserService
+$ php artisan make:service UserService
 ```
 
 ### Make Repository
 ```
-$ php artsian make:repository UserRepository
+$ php artisan make:repository UserRepository
 ```
 
 ### Make Transformer
