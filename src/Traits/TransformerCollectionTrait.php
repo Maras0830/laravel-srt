@@ -1,5 +1,5 @@
 <?php
-namespace Maras0830\laravelSRT\Traits;
+namespace Maras0830\LaravelSRT\Traits;
 
 use League\Fractal\Manager;
 use League\Fractal\TransformerAbstract;
