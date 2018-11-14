@@ -16,8 +16,6 @@ class DummyClass extends TransformerAbstract
     public function transform(DummyModel $DummyModelParameter)
     {
 
-        return [
-            // DummyModelFillable
-        ];
+        return // DummyModelFillable;
     }
 }

@@ -6,7 +6,7 @@ use DummyModelNamespace;
 
 class DummyClass extends Repository
 {
-    private $model;
+    protected $model;
 
     public function __construct(DummyModel $DummyModelParameter)
     {
