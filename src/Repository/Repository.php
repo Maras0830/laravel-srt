@@ -3,16 +3,18 @@ namespace Maras0830\LaravelSRT\Repository;
 
 class Repository
 {
-    protected $model;
-
     /**
+     * @var \Eloquent|\DB
+     */
+    protected $model;
+    /**
+     * @param array $columns
      * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
-    public function all()
+    public function all($columns = ['*'])
     {
-        return $this->model->all();
+        return $this->model->all($columns);
     }
-
     /**
      * @param $attributes
      * @return \Illuminate\Database\Eloquent\Model
@@ -21,92 +23,92 @@ class Repository
     {
         return $this->model->create($attributes);
     }
-
-    /**
-     * @return mixed
-     */
-    public function first()
-    {
-        return $this->model->first();
-    }
-
-    /**
-     * @param $column
-     * @param $value
-     * @return mixed
-     */
-    public function firstBy($column, $value)
-    {
-        return $this->model->firstBy($column, $value);
-    }
-
     /**
      * @param $id
-     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model
-     */
-    public function find($id)
-    {
-        return $this->model->find($id);
-    }
-
-    /**
-     * @param $column
-     * @param $value
-     * @return mixed
-     */
-    public function findBy($column, $value)
-    {
-        return $this->model->findBy($column, $value);
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Collection|static[]
-     */
-    public function get()
-    {
-        return $this->model->get();
-    }
-
-    /**
-     * @param $column
-     * @param $value
-     * @return \Illuminate\Database\Eloquent\Collection|static[]
-     */
-    public function getBy($column, $value)
-    {
-        return $this->model->getBy($column, $value);
-    }
-
-    /**
-     * @param $id
-     * @param $attributes
-     * @return bool|int
-     */
-    public function update($id, $attributes)
-    {
-        return $this->model->update($id, $attributes);
-    }
-
-    /**
-     * @param $column
-     * @param $value
-     * @param $attributes
+     * @param array $attributes
+     * @param array $options
      * @return bool
      */
-    public function updateBy($column, $value, $attributes)
+    public function update($id, array $attributes, array $options = [])
     {
-        return $this->model->updateBy($column, $value, $attributes);
+        $instance = $this->model->findOrFail($id);
+        return $instance->update($attributes, $options);
     }
-
+    /**
+     * @param $column
+     * @param $value
+     * @param array $attributes
+     * @param array $options
+     * @return bool
+     */
+    public function updateBy($column, $value, array $attributes = [], array $options = [])
+    {
+        return $this->model->where($column, $value)->update($attributes, $options);
+    }
+    /**
+     * @param array $columns
+     * @return mixed
+     */
+    public function first($columns = ['*'])
+    {
+        return $this->model->first($columns);
+    }
+    /**
+     * @param $column
+     * @param $value
+     * @param array $columns
+     * @return mixed
+     */
+    public function firstBy($column, $value, $columns = ['*'])
+    {
+        return $this->model->where($column, $value)->first($columns);
+    }
     /**
      * @param $id
-     * @return bool|int|null
+     * @param array $columns
+     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model
      */
-    public function destroy($id)
+    public function find($id, $columns = ['*'])
     {
-        return $this->model->destroy($id);
+        return $this->model->find($id, $columns);
     }
-
+    /**
+     * @param $column
+     * @param $value
+     * @param array $columns
+     * @return mixed
+     */
+    public function findBy($column, $value, $columns = ['*'])
+    {
+        return $this->model->where($column, $value)->first($columns);
+    }
+    /**
+     * @param array $columns
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
+    public function get($columns = ['*'])
+    {
+        return $this->model->get($columns);
+    }
+    /**
+     * @param $column
+     * @param $value
+     * @param array $columns
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
+    public function getBy($column, $value, $columns = ['*'])
+    {
+        return $this->model->where($column, $value)->get($columns);
+    }
+    /**
+     * @param $ids
+     * @return int
+     * @internal param $id
+     */
+    public function destroy($ids)
+    {
+        return $this->model->destroy($ids);
+    }
     /**
      * @param $column
      * @param $value
@@ -114,27 +116,30 @@ class Repository
      */
     public function destroyBy($column, $value)
     {
-        return $this->model->destroyBy($column, $value);
+        return $this->model->where($column, $value)->delete();
     }
-
     /**
-     * @param string $column
-     * @param $value
-     * @param int $page
-     * @return mixed
-     * @internal param $id
-     */
-    public function paginateBy($column, $value, $page = 12)
-    {
-        return $this->model->paginateBy($column, $value, $page);
-    }
-
-    /**
+     * @param null $perPage
+     * @param array $columns
+     * @param string $pageName
      * @param int $page
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function paginate($page = 12)
+    public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
     {
-        return $this->model->paginate($page);
+        return $this->model->paginate($perPage, $columns, $pageName, $page);
+    }
+    /**
+     * @param $column
+     * @param $value
+     * @param null $perPage
+     * @param array $columns
+     * @param string $pageName
+     * @param int $page
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function paginateBy($column, $value, $perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
+    {
+        return $this->model->where($column, $value)->paginate($perPage, $columns, $pageName, $page);
     }
 }
