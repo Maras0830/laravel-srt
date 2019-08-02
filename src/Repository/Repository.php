@@ -142,4 +142,14 @@ class Repository
     {
         return $this->model->where($column, $value)->paginate($perPage, $columns, $pageName, $page);
     }
+    
+    /**
+     * @param $column
+     * @param string $sortBy
+     * @return mixed
+     */
+    public function orderBy($column, $sortBy = 'DESC')
+    {
+        return $this->model->orderBy($column, $sortBy);
+    }
 }
