@@ -1,5 +1,5 @@
 <?php
-namespace Maras0830\PayNowSDK\Exceptions;
+namespace Maras0830\LaravelSRT\Exceptions;
 
 use Exception;
 
