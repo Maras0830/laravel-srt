@@ -2,6 +2,7 @@
 namespace Maras0830\LaravelSRT\Commands;
 
 use Illuminate\Console\GeneratorCommand;
+use Illuminate\Support\Str;
 
 class ServiceCommandGenerator extends GeneratorCommand
 {
@@ -70,7 +71,7 @@ class ServiceCommandGenerator extends GeneratorCommand
 
         $stub = str_replace('DummyRepositoryNamespace', $repository_namespace, $stub);
 
-        $stub = str_replace('DummyRepositoryParameter', camel_case($repository), $stub);
+        $stub = str_replace('DummyRepositoryParameter', Str::camel($repository), $stub);
 
         $stub = str_replace('DummyRepository',  $repository, $stub);
 
