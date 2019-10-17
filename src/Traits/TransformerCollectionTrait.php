@@ -3,20 +3,46 @@ namespace Maras0830\LaravelSRT\Traits;
 
 use League\Fractal\Manager;
 use League\Fractal\TransformerAbstract;
+use Maras0830\LaravelSRT\Exceptions\TransformerException;
 
 trait TransformerCollectionTrait
 {
+    protected $required_relation_keys = [];
+
+    /**
+     * @param array $keys
+     * @return $this
+     */
+    public function setRequiredRelations(array $keys = [])
+    {
+        $this->required_relation_keys = $keys;
+
+        return $this;
+    }
+
     /**
      * Change laravel collection to Transformer format
      *
      * @param $collection
      * @param TransformerAbstract $transformerAbstract
      * @return mixed
+     * @throws TransformerException
      */
     public function transCollection($collection, TransformerAbstract $transformerAbstract = null)
     {
-        if (is_null($transformerAbstract))
+        if (!empty($this->required_relation_keys)) {
+            foreach ($this->required_relation_keys as $required_relation_key) {
+                foreach ($collection as $model) {
+                    if (!$model->relationLoaded($required_relation_key)) {
+                        throw new TransformerException('required relation key not exist');
+                    }
+                }
+            }
+        }
+
+        if (is_null($transformerAbstract)) {
             $transformerAbstract = app(get_class($this));
+        }
 
         $collection = $this->collection($collection, $transformerAbstract);
 
@@ -31,14 +57,16 @@ trait TransformerCollectionTrait
      * @param $collection
      * @param $group_key
      * @param TransformerAbstract $transformerAbstract
+     * @param bool $keys
      * @return mixed
      */
-    public function transCollectionGroup($collection, $group_key, TransformerAbstract $transformerAbstract = null)
+    public function transCollectionGroup($collection, $group_key, TransformerAbstract $transformerAbstract = null, $keys = false)
     {
         $result = [];
 
-        if (is_null($transformerAbstract))
+        if (is_null($transformerAbstract)) {
             $transformerAbstract = app(get_class($this));
+        }
 
         $collection = $this->collection($collection, $transformerAbstract);
 
@@ -48,6 +76,10 @@ trait TransformerCollectionTrait
             $result[$res[$group_key]][] = $res;
         }
 
-        return array_values($result);
+        if ($keys) {
+            return $result;
+        } else {
+            return array_values($result);
+        }
     }
 }
