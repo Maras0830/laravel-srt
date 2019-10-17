@@ -41,7 +41,19 @@ trait TransformerCollectionTrait
         }
 
         if (is_null($transformerAbstract)) {
-            $transformerAbstract = app(get_class($this));
+            $vars = get_object_vars($this);
+            $class = new \ReflectionClass($this);
+            $constructor = $class->getConstructor();
+
+            $parameters = [];
+
+            if ($constructor) {
+                foreach ($constructor->getParameters() as $parameter) {
+                    $parameters[$parameter->getName()] = $vars[$parameter->getName()];
+                }
+            }
+
+            $transformerAbstract = app(get_class($this), $parameters);
         }
 
         $collection = $this->collection($collection, $transformerAbstract);
@@ -65,7 +77,19 @@ trait TransformerCollectionTrait
         $result = [];
 
         if (is_null($transformerAbstract)) {
-            $transformerAbstract = app(get_class($this));
+            $vars = get_object_vars($this);
+            $class = new \ReflectionClass($this);
+            $constructor = $class->getConstructor();
+
+            $parameters = [];
+
+            if ($constructor) {
+                foreach ($constructor->getParameters() as $parameter) {
+                    $parameters[$parameter->getName()] = $vars[$parameter->getName()];
+                }
+            }
+
+            $transformerAbstract = app(get_class($this), $parameters);
         }
 
         $collection = $this->collection($collection, $transformerAbstract);
