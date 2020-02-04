@@ -1,6 +1,7 @@
 <?php
 namespace Maras0830\LaravelSRT\Traits;
 
+use Illuminate\Support\Facades\Log;
 use League\Fractal\Manager;
 use League\Fractal\TransformerAbstract;
 use Maras0830\LaravelSRT\Exceptions\TransformerException;
