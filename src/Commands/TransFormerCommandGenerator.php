@@ -58,8 +58,8 @@ class TransFormerCommandGenerator extends GeneratorCommand
     /**
      * Replace the class name for the given stub.
      *
-     * @param  string $stub
-     * @param  string $name
+     * @param string $stub
+     * @param string $name
      * @return TransFormerCommandGenerator
      */
     protected function replaceModel(&$stub, $name)
@@ -68,20 +68,30 @@ class TransFormerCommandGenerator extends GeneratorCommand
 
         $model_namespace = $this->getModelNameSpace() . $model;
 
-        $stub = str_replace('DummyModelNamespace', $model_namespace, $stub);
+        if (class_exists($model_namespace)) {
+            $stub = str_replace('DummyModelNamespace', $model_namespace, $stub);
 
-        $stub = str_replace('DummyModelParameter', strtolower($model), $stub);
+            $stub = str_replace('DummyModelParameter', strtolower($model), $stub);
 
-        foreach (app($model_namespace)->getFillable() as $key => $value) {
-            $model_fillable[$value] = '$' . strtolower($model) . '->' . $value;
+            foreach (app($model_namespace)->getFillable() as $key => $value) {
+                $model_fillable[$value] = '$' . strtolower($model) . '->' . $value;
+            }
+
+            $stub = str_replace('// DummyModelFillable', var_export($model_fillable, true), $stub);
+
+            $stub = str_replace('=> \'', '=> ', $stub);
+            $stub = str_replace('\',', ',', $stub);
+
+            $stub = str_replace('DummyModel', $model, $stub);
+        } else {
+            $stub = str_replace('use DummyModelNamespace;', '', $stub);
+            $stub = str_replace('DummyModel $DummyModelParameter', '', $stub);
+            $stub = str_replace('/**
+     * @param DummyModel
+     * @return array
+     */', '', $stub);
+            $stub = str_replace('return // DummyModelFillable;', '', $stub);
         }
-
-        $stub = str_replace('// DummyModelFillable',  var_export($model_fillable, true), $stub);
-
-        $stub = str_replace('=> \'',  '=> ', $stub);
-        $stub = str_replace('\',',  ',', $stub);
-
-        $stub = str_replace('DummyModel',  $model, $stub);
 
         return $this;
     }
