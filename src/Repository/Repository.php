@@ -48,7 +48,7 @@ abstract class Repository
         return $this->model = $model->newModelQuery();
     }
 
-    public function restModel()
+    public function resetModel()
     {
         $this->makeModel();
 
@@ -71,7 +71,7 @@ abstract class Repository
     {
         $result = $this->model->all($columns);
 
-        $this->restModel();
+        $this->resetModel();
 
         return $result;
     }
@@ -83,7 +83,7 @@ abstract class Repository
     {
         $result = $this->model->create($attributes);
 
-        $this->restModel();
+        $this->resetModel();
 
         return $result;
     }
@@ -99,7 +99,7 @@ abstract class Repository
 
         $result = $instance->update($attributes, $options);
 
-        $this->restModel();
+        $this->resetModel();
 
         return $result;
     }
@@ -114,7 +114,7 @@ abstract class Repository
     {
         $result = $this->model->where($column, $value)->update($attributes, $options);
 
-        $this->restModel();
+        $this->resetModel();
 
         return $result;
     }
@@ -126,7 +126,7 @@ abstract class Repository
     {
         $result = $this->model->first($columns);
 
-        $this->restModel();
+        $this->resetModel();
 
         return $result;
     }
@@ -140,7 +140,7 @@ abstract class Repository
     {
         $result = $this->model->where($column, $value)->first($columns);
 
-        $this->restModel();
+        $this->resetModel();
 
         return $result;
     }
@@ -153,7 +153,7 @@ abstract class Repository
     {
         $result = $this->model->find($id, $columns);
 
-        $this->restModel();
+        $this->resetModel();
 
         return $result;
     }
@@ -167,7 +167,7 @@ abstract class Repository
     {
         $result = $this->model->where($column, $value)->first($columns);
 
-        $this->restModel();
+        $this->resetModel();
 
         return $result;
     }
@@ -179,7 +179,7 @@ abstract class Repository
     {
         $result = $this->model->get();
 
-        $this->restModel();
+        $this->resetModel();
 
         return $result;
     }
@@ -193,7 +193,7 @@ abstract class Repository
     {
         $result = $this->model->where($column, $value)->get($columns);
 
-        $this->restModel();
+        $this->resetModel();
 
         return $result;
     }
@@ -206,7 +206,7 @@ abstract class Repository
     {
         $result = $this->model->destroy($ids);
 
-        $this->restModel();
+        $this->resetModel();
 
         return $result;
     }
@@ -219,7 +219,7 @@ abstract class Repository
     {
         $result = $this->model->where($column, $value)->delete();
 
-        $this->restModel();
+        $this->resetModel();
 
         return $result;
     }
@@ -234,7 +234,7 @@ abstract class Repository
     {
         $result = $this->model->paginate($perPage, $columns, $pageName, $page);
 
-        $this->restModel();
+        $this->resetModel();
 
         return $result;
     }
@@ -251,7 +251,7 @@ abstract class Repository
     {
         $result = $this->model->where($column, $value)->paginate($perPage, $columns, $pageName, $page);
 
-        $this->restModel();
+        $this->resetModel();
 
         return $result;
     }
