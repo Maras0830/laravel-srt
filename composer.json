@@ -3,7 +3,9 @@
     "description": "Service, Repository, Transformer simple generator.",
     "type": "library",
     "require": {
-        "league/fractal": "^0.17.0"
+        "league/fractal": "^0.17.0",
+        "illuminate/database": "~5.0|~6.0|~7.0|^8.0",
+        "illuminate/pagination": "~5.0|~6.0|~7.0|^8.0"
     },
     "authors": [
         {

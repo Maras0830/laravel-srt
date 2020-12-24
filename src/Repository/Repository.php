@@ -1,19 +1,79 @@
 <?php
 namespace Maras0830\LaravelSRT\Repository;
 
-class Repository
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Maras0830\LaravelSRT\Exceptions\RepositoryException;
+use Illuminate\Container\Container as Application;
+
+abstract class Repository
 {
     /**
-     * @var \Eloquent|\DB
+     * @var Application
+     */
+    protected $app;
+
+    /**
+     * @var Builder
      */
     protected $model;
+
+    public function __construct(Application $app)
+    {
+        $this->app = $app;
+        $this->makeModel();
+        $this->boot();
+    }
+
+    /**
+     * Create a new resource instance.
+     *
+     * @return static
+     */
+    public static function make()
+    {
+        return new static(app());
+    }
+
+    abstract public function model();
+
+    public function makeModel()
+    {
+        $model = $this->app->make($this->model());
+
+        if (!$model instanceof Model) {
+            throw new RepositoryException("Class {$this->model()} must be an instance of Illuminate\\Database\\Eloquent\\Model");
+        }
+
+        return $this->model = $model->newModelQuery();
+    }
+
+    public function restModel()
+    {
+        $this->makeModel();
+
+        return $this;
+    }
+
+    /**
+     *
+     */
+    public function boot()
+    {
+        //
+    }
+
     /**
      * @param array $columns
      * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
     public function all($columns = ['*'])
     {
-        return $this->model->all($columns);
+        $result = $this->model->all($columns);
+
+        $this->restModel();
+
+        return $result;
     }
     /**
      * @param $attributes
@@ -21,7 +81,11 @@ class Repository
      */
     public function create($attributes)
     {
-        return $this->model->create($attributes);
+        $result = $this->model->create($attributes);
+
+        $this->restModel();
+
+        return $result;
     }
     /**
      * @param $id
@@ -32,7 +96,12 @@ class Repository
     public function update($id, array $attributes, array $options = [])
     {
         $instance = $this->model->findOrFail($id);
-        return $instance->update($attributes, $options);
+
+        $result = $instance->update($attributes, $options);
+
+        $this->restModel();
+
+        return $result;
     }
     /**
      * @param $column
@@ -43,7 +112,11 @@ class Repository
      */
     public function updateBy($column, $value, array $attributes = [], array $options = [])
     {
-        return $this->model->where($column, $value)->update($attributes, $options);
+        $result = $this->model->where($column, $value)->update($attributes, $options);
+
+        $this->restModel();
+
+        return $result;
     }
     /**
      * @param array $columns
@@ -51,7 +124,11 @@ class Repository
      */
     public function first($columns = ['*'])
     {
-        return $this->model->first($columns);
+        $result = $this->model->first($columns);
+
+        $this->restModel();
+
+        return $result;
     }
     /**
      * @param $column
@@ -61,7 +138,11 @@ class Repository
      */
     public function firstBy($column, $value, $columns = ['*'])
     {
-        return $this->model->where($column, $value)->first($columns);
+        $result = $this->model->where($column, $value)->first($columns);
+
+        $this->restModel();
+
+        return $result;
     }
     /**
      * @param $id
@@ -70,7 +151,11 @@ class Repository
      */
     public function find($id, $columns = ['*'])
     {
-        return $this->model->find($id, $columns);
+        $result = $this->model->find($id, $columns);
+
+        $this->restModel();
+
+        return $result;
     }
     /**
      * @param $column
@@ -80,7 +165,11 @@ class Repository
      */
     public function findBy($column, $value, $columns = ['*'])
     {
-        return $this->model->where($column, $value)->first($columns);
+        $result = $this->model->where($column, $value)->first($columns);
+
+        $this->restModel();
+
+        return $result;
     }
     /**
      * @param array $columns
@@ -88,7 +177,11 @@ class Repository
      */
     public function get($columns = ['*'])
     {
-        return $this->model->get($columns);
+        $result = $this->model->get();
+
+        $this->restModel();
+
+        return $result;
     }
     /**
      * @param $column
@@ -98,7 +191,11 @@ class Repository
      */
     public function getBy($column, $value, $columns = ['*'])
     {
-        return $this->model->where($column, $value)->get($columns);
+        $result = $this->model->where($column, $value)->get($columns);
+
+        $this->restModel();
+
+        return $result;
     }
     /**
      * @param $ids
@@ -107,7 +204,11 @@ class Repository
      */
     public function destroy($ids)
     {
-        return $this->model->destroy($ids);
+        $result = $this->model->destroy($ids);
+
+        $this->restModel();
+
+        return $result;
     }
     /**
      * @param $column
@@ -116,7 +217,11 @@ class Repository
      */
     public function destroyBy($column, $value)
     {
-        return $this->model->where($column, $value)->delete();
+        $result = $this->model->where($column, $value)->delete();
+
+        $this->restModel();
+
+        return $result;
     }
     /**
      * @param null $perPage
@@ -127,7 +232,11 @@ class Repository
      */
     public function paginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
     {
-        return $this->model->paginate($perPage, $columns, $pageName, $page);
+        $result = $this->model->paginate($perPage, $columns, $pageName, $page);
+
+        $this->restModel();
+
+        return $result;
     }
     /**
      * @param $column
@@ -140,9 +249,13 @@ class Repository
      */
     public function paginateBy($column, $value, $perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
     {
-        return $this->model->where($column, $value)->paginate($perPage, $columns, $pageName, $page);
+        $result = $this->model->where($column, $value)->paginate($perPage, $columns, $pageName, $page);
+
+        $this->restModel();
+
+        return $result;
     }
-    
+
     /**
      * @param $column
      * @param string $sortBy
@@ -150,6 +263,8 @@ class Repository
      */
     public function orderBy($column, $sortBy = 'DESC')
     {
-        return $this->model->orderBy($column, $sortBy);
+        $this->model->orderBy($column, $sortBy);
+
+        return $this;
     }
 }
