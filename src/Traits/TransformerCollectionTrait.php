@@ -149,4 +149,33 @@ trait TransformerCollectionTrait
 
         return $collection;
     }
+
+    /**
+     * @param $object
+     * @param $relation_column
+     * @param $transformerAbstract
+     * @param null $default
+     * @return null
+     */
+    private function getRelationTransform($object, $relation_column, $transformerAbstract, $default = null)
+    {
+        return $object->relationLoaded($relation_column)
+            ? $transformerAbstract->transform($object->{$relation_column})
+            : $default;
+    }
+
+    /**
+     * @param $object
+     * @param $relation_column
+     * @param $transformerAbstract
+     * @param array $default
+     * @return null
+     */
+    private function getRelationTransCollection($object, $relation_column, $transformerAbstract, $default = [])
+    {
+
+        return $object->relationLoaded($relation_column)
+            ? $transformerAbstract->transCollection($object->{$relation_column})
+            : $default;
+    }
 }
