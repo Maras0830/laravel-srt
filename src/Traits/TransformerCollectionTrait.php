@@ -159,7 +159,7 @@ trait TransformerCollectionTrait
      */
     private function getRelationTransform($object, $relation_column, $transformerAbstract, $default = null)
     {
-        return $object->relationLoaded($relation_column)
+        return ($object->relationLoaded($relation_column) && !empty($object->{$relation_column}))
             ? $transformerAbstract->transform($object->{$relation_column})
             : $default;
     }
@@ -174,7 +174,7 @@ trait TransformerCollectionTrait
     private function getRelationTransCollection($object, $relation_column, $transformerAbstract, $default = [])
     {
 
-        return $object->relationLoaded($relation_column)
+        return ($object->relationLoaded($relation_column) && !empty($object->{$relation_column}))
             ? $transformerAbstract->transCollection($object->{$relation_column})
             : $default;
     }
