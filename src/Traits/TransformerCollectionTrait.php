@@ -178,4 +178,18 @@ trait TransformerCollectionTrait
             ? $transformerAbstract->transCollection($object->{$relation_column})
             : $default;
     }
+    
+    /**
+     * @param $object
+     * @param $relation_column
+     * @param $callback
+     * @param null $default
+     * @return mixed|null
+     */
+    private function getRelationHandler($object, $relation_column, $callback, $default = null)
+    {
+        return ($object->relationLoaded($relation_column) && !empty($object->{$relation_column}))
+            ? $callback($object->{$relation_column})
+            : $default;
+    }
 }
