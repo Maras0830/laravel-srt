@@ -8,8 +8,8 @@ class DummyClass extends Repository
 {
     protected $model;
 
-    public function __construct(DummyModel $DummyModelParameter)
+    public function model()
     {
-        $this->model = $DummyModelParameter;
+        return DummyModel::class;
     }
 }
