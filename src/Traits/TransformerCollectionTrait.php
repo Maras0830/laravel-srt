@@ -14,6 +14,8 @@ trait TransformerCollectionTrait
 
     protected $is_strict_mode = true;
 
+    protected $enable_auto_loaded_required_keys = true;
+
     /**
      * @param array $keys
      * @return $this
@@ -26,15 +28,29 @@ trait TransformerCollectionTrait
     }
 
     /**
+     * @param bool $enable_auto_loaded_required_keys
+     * @return $this
+     */
+    public function setAutoLoadedRequiredKeys(bool $enable_auto_loaded_required_keys = true)
+    {
+        $this->enable_auto_loaded_required_keys = $enable_auto_loaded_required_keys;
+
+        return $this;
+    }
+
+    /**
      * is_strict_model
      * true: TransformerException
      * false: Log::warning
      *
      * @param bool $is_strict_mode
+     * @return $this
      */
-    public function setStrictMode($is_strict_mode = true)
+    public function setStrictMode(bool $is_strict_mode = true)
     {
         $this->is_strict_mode = $is_strict_mode;
+
+        return $this;
     }
 
     /**
@@ -48,6 +64,8 @@ trait TransformerCollectionTrait
      */
     public function transCollection($collection, TransformerAbstract $transformerAbstract = null)
     {
+        $this->loadRequiredRelationKeys($collection);
+
         $this->setUnRelationLoadedKeys($collection);
 
         $this->logStrictMode();
@@ -73,6 +91,8 @@ trait TransformerCollectionTrait
     public function transCollectionGroup($collection, $group_key, TransformerAbstract $transformerAbstract = null, $keys = false)
     {
         $result = [];
+
+        $this->loadRequiredRelationKeys($collection);
 
         $this->setUnRelationLoadedKeys($collection);
 
@@ -119,6 +139,18 @@ trait TransformerCollectionTrait
                 Log::warning("required relation key not exist - " . get_class($this), $this->missing_required_keys);
             }
         }
+    }
+
+    /**
+     * @param $collection
+     * @return mixed
+     */
+    private function loadRequiredRelationKeys($collection)
+    {
+        if ($this->enable_auto_loaded_required_keys)
+            return $collection->load($this->required_relation_keys);
+        else
+            return $collection;
     }
 
     /**
@@ -178,7 +210,7 @@ trait TransformerCollectionTrait
             ? $transformerAbstract->transCollection($object->{$relation_column})
             : $default;
     }
-    
+
     /**
      * @param $object
      * @param $relation_column
