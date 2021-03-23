@@ -1,6 +1,7 @@
 <?php
 namespace Maras0830\LaravelSRT\Traits;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
 use League\Fractal\Manager;
 use League\Fractal\TransformerAbstract;
@@ -147,7 +148,7 @@ trait TransformerCollectionTrait
      */
     private function loadRequiredRelationKeys($collection)
     {
-        if ($this->enable_auto_loaded_required_keys)
+        if ($this->enable_auto_loaded_required_keys && method_exists($collection, 'load'))
             return $collection->load($this->required_relation_keys);
         else
             return $collection;
