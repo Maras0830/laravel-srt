@@ -45,7 +45,7 @@ abstract class Repository
             throw new RepositoryException("Class {$this->model()} must be an instance of Illuminate\\Database\\Eloquent\\Model");
         }
 
-        return $this->model = $model->newModelQuery();
+        return $this->model = $model->query();
     }
 
     public function resetModel()
