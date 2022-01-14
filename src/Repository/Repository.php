@@ -204,7 +204,7 @@ abstract class Repository
      */
     public function destroy($ids)
     {
-        $result = $this->model->delete($ids);
+        $result = $this->model->whereIn('id', $ids)->delete();
 
         $this->resetModel();
 
