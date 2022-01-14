@@ -204,7 +204,7 @@ abstract class Repository
      */
     public function destroy($ids)
     {
-        $result = $this->model->destroy($ids);
+        $result = $this->model->delete($ids);
 
         $this->resetModel();
 
