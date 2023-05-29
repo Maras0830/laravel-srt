@@ -8,7 +8,6 @@ class DummyClass
     private $repository;
 
     /**
-     * AtmTransformer constructor.
      * @param $DummyRepositoryParameter
      */
     public function __construct(DummyRepository $DummyRepositoryParameter)
